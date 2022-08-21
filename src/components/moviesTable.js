@@ -1,10 +1,17 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Like from "./common/like";
 import Table from "./common/table";
 
 class MoviesTable extends Component {
 	columns = [
-		{ path: "title", label: "Title" },
+		{
+			path: "title",
+			label: "Title",
+			content: (movie) => (
+				<Link to={`/movies/${movie._id}`}>{movie.title}</Link>
+			),
+		},
 		{ path: "genre.name", label: "Genre" },
 		{ path: "numberInStock", label: "Stock" },
 		{ path: "dailyRentalRate", label: "Rate" },
@@ -36,24 +43,8 @@ class MoviesTable extends Component {
 				data={movies}
 				sortColumn={sortColumn}
 			/>
-			// <table className="table table-strih5ed table-sm">
-			// 	<TableHeader
-			// 		columns={this.columns}
-			// 		sortColumn={sortColumn}
-			// 		onSort={onSort}
-			// 	/>
-			// 	<TableBody data={movies} columns={this.columns} />
-			// </table>
 		);
 	}
 }
 
 export default MoviesTable;
-
-// const MoviesTable = ({ movies, onDelete, onLike, onSort }) => {
-// 	return (
-
-// 	);
-// };
-
-// export default MoviesTable;
