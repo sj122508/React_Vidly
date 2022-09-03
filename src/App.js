@@ -1,12 +1,13 @@
-import logo from "./logo.svg";
+import { Redirect, Route, Switch } from "react-router-dom";
 import "./App.css";
+
 import Movies from "./components/movies";
 import NavBar from "./components/navBar";
-import { Redirect, Route, Switch } from "react-router-dom";
 import Customers from "./components/customers";
 import Rentals from "./components/rentals";
 import NotFound from "./components/notFound";
 import MovieForm from "./components/movieForm";
+import LoginForm from "./components/loginForm";
 
 function App() {
 	return (
@@ -14,6 +15,7 @@ function App() {
 			<NavBar />
 			<main className="container">
 				<Switch>
+					<Route path={"/login"} component={LoginForm} />
 					<Route path={"/movies/:id"} component={MovieForm} />
 					<Route path="/movies" component={Movies} />
 					<Route path="/customers" component={Customers} />
