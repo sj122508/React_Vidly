@@ -1,12 +1,15 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import _ from "lodash";
 
-import Pagination from "./common/pagination";
 import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
 import { paginate } from "../utils/paginate";
+
 import ListGroup from "./common/listGroup";
-import _ from "lodash";
 import MoviesTable from "./moviesTable";
+import Pagination from "./common/pagination";
+import SearchBox from "./common/searchBox";
 
 class Movies extends Component {
 	state = {
@@ -14,8 +17,9 @@ class Movies extends Component {
 		genres: [],
 		pageSize: 4,
 		currentPage: 1,
-		selectedGenre: "",
+		selectedGenre: null,
 		sortColumn: { path: "title", order: "asc" },
+		searchQuery: "",
 	};
 
 	componentDidMount() {
@@ -41,15 +45,20 @@ class Movies extends Component {
 	};
 
 	handlePageChange = (page) => {
+		console.log(page, "pagepagepagepagepage");
 		this.setState({ currentPage: page });
 	};
 
 	handleGenreSelect = (genre) => {
-		this.setState({ selectedGenre: genre, currentPage: 1 });
+		this.setState({ selectedGenre: genre, currentPage: 1, searchQuery: "" });
 	};
 
 	handleSort = (sortColumn) => {
 		this.setState({ sortColumn });
+	};
+
+	handleSearch = (query) => {
+		this.setState({ searchQuery: query, selectedGenre: null, currentPage: 1 });
 	};
 
 	getPageData = () => {
@@ -58,13 +67,18 @@ class Movies extends Component {
 			pageSize,
 			currentPage,
 			selectedGenre,
+			searchQuery,
 			sortColumn,
 		} = this.state;
 
-		const filtered =
-			selectedGenre && selectedGenre._id
-				? allMovies.filter((m) => m.genre._id === selectedGenre._id)
-				: allMovies;
+		let filtered = allMovies;
+
+		if (searchQuery)
+			filtered = allMovies.filter((m) =>
+				m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+			);
+		else if (selectedGenre && selectedGenre._id)
+			filtered = allMovies.filter((m) => m.genre._id === selectedGenre._id);
 
 		const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
@@ -81,6 +95,7 @@ class Movies extends Component {
 			genres,
 			sortColumn,
 			selectedGenre,
+			searchQuery,
 		} = this.state;
 
 		const { length: count } = allMovies;
@@ -100,7 +115,11 @@ class Movies extends Component {
 
 				<div className="col">
 					<div className="table-responsive">
+						<Link to="/movies/new" className="btn btn-primary mb-3">
+							New Movie
+						</Link>
 						<p>Showing {totalCount} movies in the database.</p>
+						<SearchBox value={searchQuery} onChange={this.handleSearch} />
 						<MoviesTable
 							sortColumn={sortColumn}
 							movies={movies}
