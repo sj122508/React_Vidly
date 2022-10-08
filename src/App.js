@@ -1,5 +1,7 @@
 import { Redirect, Route, Switch } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import Movies from "./components/movies";
 import NavBar from "./components/navBar";
@@ -9,10 +11,12 @@ import NotFound from "./components/notFound";
 import MovieForm from "./components/movieForm";
 import LoginForm from "./components/loginForm";
 import RegisterForm from "./components/registerForm";
+import React from "react";
 
 function App() {
 	return (
-		<>
+		<React.Fragment>
+			<ToastContainer />
 			<NavBar />
 			<main className="container">
 				<Switch>
@@ -27,7 +31,7 @@ function App() {
 					<Redirect to="not-found" />
 				</Switch>
 			</main>
-		</>
+		</React.Fragment>
 	);
 }
 
