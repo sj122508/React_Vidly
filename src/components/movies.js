@@ -35,7 +35,7 @@ class Movies extends Component {
 
 	handleDelete = async (movie) => {
 		const originalMovies = this.state.movies;
-		const movies = originalMovies.filter((m) => m._id !== movie.id);
+		const movies = originalMovies.filter((m) => m._id !== movie._id);
 		this.setState({
 			movies,
 		});
@@ -61,7 +61,6 @@ class Movies extends Component {
 	};
 
 	handlePageChange = (page) => {
-		console.log(page, "pagepagepagepagepage");
 		this.setState({ currentPage: page });
 	};
 
@@ -114,6 +113,8 @@ class Movies extends Component {
 			searchQuery,
 		} = this.state;
 
+		const { user } = this.props;
+
 		const { length: count } = allMovies;
 
 		if (count === 0) return <p>There are no movies in the database.</p>;
@@ -131,9 +132,11 @@ class Movies extends Component {
 
 				<div className="col">
 					<div className="table-responsive">
-						<Link to="/movies/new" className="btn btn-primary mb-3">
-							New Movie
-						</Link>
+						{user && (
+							<Link to="/movies/new" className="btn btn-primary mb-3">
+								New Movie
+							</Link>
+						)}
 						<p>Showing {totalCount} movies in the database.</p>
 						<SearchBox value={searchQuery} onChange={this.handleSearch} />
 						<MoviesTable

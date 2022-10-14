@@ -40,7 +40,6 @@ class MovieForm extends Form {
 
 	async populateGenres() {
 		const { data: genres } = await getGenres();
-		console.log(genres, "genres");
 		this.setState({ genres });
 	}
 
@@ -48,7 +47,7 @@ class MovieForm extends Form {
 		try {
 			const movieId = this.props.match.params.id;
 			if (movieId === "new") return;
-			
+
 			const { data: movie } = await getMovie(movieId);
 			this.setState({ data: this.mapToViewModel(movie) });
 		} catch (error) {
@@ -58,7 +57,6 @@ class MovieForm extends Form {
 	}
 
 	mapToViewModel(movie) {
-		console.log(movie, "movie");
 		return {
 			_id: movie._id,
 			title: movie.title,
@@ -74,7 +72,6 @@ class MovieForm extends Form {
 	};
 
 	render() {
-		// console.log("Hell");
 		return (
 			<div>
 				<h1>Movie Form</h1>
